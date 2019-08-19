@@ -691,4 +691,20 @@ class Public_model extends CI_Model
         return $result->result_array();
     }
 
+    public function getUserByEmail($email)
+    {
+        $this->db->where('email', $email);
+        $query = $this->db->get('users_public');
+        return $query->row_array();
+    }
+
+    public function changeUserPassword($user_id, $newPass)
+    {
+        $this->db->where('id', $user_id);
+        if (!$this->db->update('users_public', array(
+                    'password' => md5($newPass),
+                ))) {
+            log_message('error', print_r($this->db->error(), true));
+        }
+    }
 }

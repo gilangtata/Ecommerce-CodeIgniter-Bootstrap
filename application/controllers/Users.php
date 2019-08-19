@@ -59,6 +59,32 @@ class Users extends MY_Controller
         $this->render('signup', $head, $data);
     }
 
+    public function forgotten()
+    {
+        if (isset($_POST['email'])) {
+            $result = $this->Public_model->getUserByEmail($_POST['email']);
+            if(count($result) < 1) {
+              $this->session->set_flashdata('resultSend', 'Cant find user with this email address.');
+              redirect(LANG_URL . '/forgotten-password');
+            } else {
+                // new random password
+                $newPass = str_shuffle(bin2hex(openssl_random_pseudo_bytes(4)));
+                $this->Public_model->changeUserPassword($result['id'], $newPass);
+                $this->sendmail->sendTo($_POST['email'], 'Admin', 'You ask to change your password', 'Hello, your new password is ' . $newPass);
+                $this->session->set_flashdata('message', 'You alreadoy receive email with your new password.');
+                redirect(LANG_URL . '/login');
+            }   
+            
+        }
+
+        $head = array();
+        $data = array();
+        $head['title'] = lang('user_forgotten_page');
+        $head['description'] = lang('user_forgotten_page');
+        $head['keywords'] = str_replace(" ", ",", $head['title']);
+        $this->render('forgotten', $head, $data);
+    }
+
     public function myaccount($page = 0)
     {
         if (isset($_POST['update'])) {

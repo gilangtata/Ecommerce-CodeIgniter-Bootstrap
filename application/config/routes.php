@@ -109,6 +109,10 @@ $route['(\w{2})/login'] = "Users/login";
 $route['register'] = "Users/register";
 $route['(\w{2})/register'] = "Users/register";
 
+// Register Public Users Page
+$route['forgotten-password'] = "Users/forgotten";
+$route['(\w{2})/forgotten-password'] = "Users/forgotten";
+
 // Users Profiles Public Users Page
 $route['myaccount'] = "Users/myaccount";
 $route['myaccount/(:num)'] = "Users/myaccount/$1";
